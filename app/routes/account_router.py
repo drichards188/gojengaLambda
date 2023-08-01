@@ -21,8 +21,8 @@ router = APIRouter()
 # logger = logging.getLogger(__name__)
 
 @router.get("/{username}", tags=["Account"])
-async def get_user(request: Request, username: str, is_test: Optional[bool] | None = Header(default=False),
-                   current_user: User = Depends(get_current_active_user)):
+async def get_user(request: Request, username: str, is_test: Optional[bool] | None = Header(default=False)
+                   ):
         if Lib.detect_special_characters(username):
             raise HTTPException(status_code=status.HTTP_206_PARTIAL_CONTENT, detail='please send legal username')
         try:
