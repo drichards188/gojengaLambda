@@ -1,6 +1,12 @@
 from fastapi import APIRouter, HTTPException
+import logging.config
 
 router = APIRouter()
+
+# logging.config.fileConfig('../logging.conf', disable_existing_loggers=False)
+#
+# # get root logger
+# logger = logging.getLogger(__name__)
 
 
 @router.get("/")

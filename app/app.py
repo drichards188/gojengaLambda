@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from mangum import Mangum
 
-from app.routes import helloworld_router
+from app.routes import helloworld_router, account_router
 from app.monitoring import logging_config
 from app.middlewares.correlation_id_middleware import CorrelationIdMiddleware
 from app.middlewares.logging_middleware import LoggingMiddleware
@@ -55,6 +55,7 @@ async def health():
 
 
 app.include_router(helloworld_router.router, prefix='/hello', tags=['hello'])
+app.include_router(account_router.router, prefix='/account', tags=['account'])
 
 ###############################################################################
 #   Handler for AWS Lambda                                                    #
