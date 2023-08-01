@@ -5,7 +5,7 @@ from decimal import *
 from opentelemetry import trace
 
 from models.Portfolio import Portfolio
-from storage.Dynamo import Dynamo
+from app.storage.Dynamo import Dynamo
 
 logger = logging.getLogger(__name__)
 tracer = trace.get_tracer(__name__)

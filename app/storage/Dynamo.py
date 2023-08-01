@@ -4,7 +4,7 @@ import boto3
 from botocore.exceptions import ClientError
 from opentelemetry import trace
 
-from models.Portfolio import Portfolio
+from app.models.Portfolio import Portfolio
 
 dyn_resource = boto3.resource('dynamodb')
 logger = logging.getLogger(__name__)

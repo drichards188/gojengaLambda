@@ -11,7 +11,7 @@ from common.Auth import get_password_hash
 from handlers.account_handler import AccountHandler
 from handlers.portfolio_handler import PortfolioHandler
 from models.Portfolio import Portfolio
-from storage.Dynamo import Dynamo
+from app.storage.Dynamo import Dynamo
 
 logger = logging.getLogger(__name__)
 tracer = trace.get_tracer(__name__)

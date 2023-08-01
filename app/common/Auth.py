@@ -8,8 +8,7 @@ from jose import JWTError, jwt, ExpiredSignatureError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from storage.Dynamo import Dynamo, logger
-
+from app.storage.Dynamo import Dynamo, logger
 
 class MyAuth:
     def __init__(self):

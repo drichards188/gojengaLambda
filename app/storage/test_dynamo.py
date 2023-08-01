@@ -1,6 +1,6 @@
 import unittest
 
-from storage.Dynamo import Dynamo
+from app.storage.Dynamo import Dynamo
 
 
 class TestDynamo(unittest.TestCase):

@@ -2,7 +2,7 @@ import logging
 from decimal import *
 from opentelemetry import trace
 
-from storage.Dynamo import Dynamo
+from app.storage.Dynamo import Dynamo
 
 logger = logging.getLogger(__name__)
 tracer = trace.get_tracer(__name__)
@@ -20,6 +20,7 @@ class AccountHandler:
             if is_test:
                 table_name = 'ledgerTest'
             try:
+                print('--> handle getting account')
                 user = Dynamo.get_item(table_name, {'name': username})
                 return user
             except Exception as e:
