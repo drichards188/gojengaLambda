@@ -3,8 +3,9 @@ import uvicorn
 
 from fastapi import FastAPI, HTTPException
 from mangum import Mangum
+from starlette.middleware.cors import CORSMiddleware
 
-from app.routes import helloworld_router, account_router
+from app.routes import helloworld_router, account_router, auth_router
 from app.monitoring import logging_config
 from app.middlewares.correlation_id_middleware import CorrelationIdMiddleware
 from app.middlewares.logging_middleware import LoggingMiddleware
@@ -16,6 +17,16 @@ from app.handlers.http_exception_handler import http_exception_handler
 ###############################################################################
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 ###############################################################################
 #   Logging configuration                                                     #
@@ -56,6 +67,7 @@ async def health():
 
 app.include_router(helloworld_router.router, prefix='/hello', tags=['hello'])
 app.include_router(account_router.router, prefix='/account', tags=['account'])
+app.include_router(auth_router.router, prefix='/auth', tags=['auth'])
 
 ###############################################################################
 #   Handler for AWS Lambda                                                    #
