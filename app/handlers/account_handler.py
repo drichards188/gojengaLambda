@@ -11,54 +11,45 @@ tracer = trace.get_tracer(__name__)
 class AccountHandler:
     @staticmethod
     def handle_get_account(username: str, is_test: bool) -> dict:
-        with tracer.start_as_current_span(
-                "handle_get_account",
-                attributes={'attr.username': username, 'attr.is_test': is_test},
-                kind=trace.SpanKind.SERVER
-        ):
-            table_name: str = 'ledger'
-            if is_test:
-                table_name = 'ledgerTest'
-            try:
-                print('--> handle getting account')
-                user = Dynamo.get_item(table_name, {'name': username})
-                return user
-            except Exception as e:
-                logger.info(f'error {e}')
-                raise ValueError(e)
+        # table_name: str = 'ledger'
+        # if is_test:
+        #     table_name = 'ledgerTest'
+
+        table_name: str = 'ledgerTest'
+
+        try:
+            print(f'--> handle getting account {username}')
+            user = Dynamo.get_item(table_name, {'name': username})
+            return user
+        except Exception as e:
+            logger.info(f'error {e}')
+            raise ValueError(e)
 
     @staticmethod
     def handle_create_account(username: str, balance: Decimal, is_test: bool) -> str:
-        with tracer.start_as_current_span(
-                "handle_create_user",
-                attributes={'username': username, 'attr.is_test': is_test}
-        ):
-            table_name: str = 'ledger'
-            if is_test:
-                table_name = 'ledgerTest'
-            try:
-                resp = Dynamo.create_item(table_name, {'name': username,
-                                                       'balance': balance})
-                return resp
-            except Exception as e:
-                logger.info(f'error {e}')
-                raise ValueError(e)
+        table_name: str = 'ledger'
+        if is_test:
+            table_name = 'ledgerTest'
+        try:
+            resp = Dynamo.create_item(table_name, {'name': username,
+                                                   'balance': balance})
+            return resp
+        except Exception as e:
+            logger.info(f'error {e}')
+            raise ValueError(e)
 
     @staticmethod
     def handle_update_account(username: str, balance: Decimal, is_test: bool) -> str:
-        with tracer.start_as_current_span(
-                "handle_update_user",
-                attributes={'attr.username': username, 'is_test': is_test}):
-            table_name: str = 'ledger'
-            if is_test:
-                table_name = 'ledgerTest'
-            try:
-                resp = Dynamo.update_account_balance(table_name, {'name': username,
-                                                                  'balance': balance})
-                return resp
-            except Exception as e:
-                logger.info(f'error {e}')
-                raise ValueError(e)
+        table_name: str = 'ledger'
+        if is_test:
+            table_name = 'ledgerTest'
+        try:
+            resp = Dynamo.update_account_balance(table_name, {'name': username,
+                                                              'balance': balance})
+            return resp
+        except Exception as e:
+            logger.info(f'error {e}')
+            raise ValueError(e)
 
     @staticmethod
     def handle_modify_account(username: str, balance: Decimal, is_test: bool) -> str:

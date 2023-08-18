@@ -14,23 +14,23 @@ tracer = trace.get_tracer(__name__)
 class Dynamo:
     @staticmethod
     def get_item(table_name: str, query: dict):
-        with tracer.start_as_current_span(
-                "get_item",
-                attributes={'attr.table_name': table_name, 'attr.query': query}):
-            try:
-                table = dyn_resource.Table(table_name)
-                response = table.get_item(Key=query)
+        print(f'get_item: {query}')
+        try:
+            table = dyn_resource.Table(table_name)
+            response = table.get_item(Key=query)
 
-                if 'Item' in response:
-                    return response['Item']
-                else:
-                    logger.error('item not found')
-                    return {'message': 'item not found'}
-                    # raise ValueError(f'item not found {query}')
-            except ClientError as e:
-                logger.error(
-                    f"{e.response['Error']['Code'], e.response['Error']['Message']}")
-                raise Exception(f"dynamo error {e.response['Error']['Code']} and msg {e.response['Error']['Message']}")
+            if 'Item' in response:
+                print(f'item found: {response["Item"]}')
+                return response['Item']
+            else:
+                print(f'item not found: {query}')
+                logger.error('item not found')
+                return {'message': 'item not found'}
+                # raise ValueError(f'item not found {query}')
+        except ClientError as e:
+            logger.error(
+                f"{e.response['Error']['Code'], e.response['Error']['Message']}")
+            raise Exception(f"dynamo error {e.response['Error']['Code']} and msg {e.response['Error']['Message']}")
 
     @staticmethod
     def create_item(table_name: str, item: dict | Portfolio) -> str:

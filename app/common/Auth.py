@@ -63,14 +63,24 @@ app = FastAPI()
 
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    print("--> running verify_password")
+    try:
+        verify_result = pwd_context.verify(plain_password, hashed_password)
+        print(f'--> verify_result: {verify_result}')
+        return verify_result
+    except Exception as e:
+        print(f'error verifying password: {e}')
+        logger.error(e)
+    return False
 
 
 def get_password_hash(password):
+    print("--> running get_password_hash")
     return pwd_context.hash(password)
 
 
 def get_user(table_name, username: str):
+    print("--> running get_user")
     query: dict = {'name': username}
     try:
         user = Dynamo.get_item(table_name, query)
@@ -81,15 +91,19 @@ def get_user(table_name, username: str):
 
 
 def authenticate_user(table_name, username: str, password: str):
+    print("--> running authenticate_user")
     user = get_user(table_name, username)
     if not user:
+        print("--> user not found")
         return False
     if not verify_password(password, user["password"]):
         return False
+    print("--> user authenticated")
     return user
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    print("--> running create_access_token")
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(pytz.utc) + expires_delta
@@ -101,6 +115,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 def renew_access_token(data: dict, expires_delta: int | None = None):
+    print("--> running renew_access_token")
     to_encode = data.copy()
 
     expire = datetime.now(pytz.utc) + timedelta(minutes=15)
@@ -110,13 +125,14 @@ def renew_access_token(data: dict, expires_delta: int | None = None):
 
 
 def get_token_payload(token: str):
+    print("--> running get_token_payload")
     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     return payload
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     table_name = "usersTest"
-
+    print("--> running get_current_user")
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -146,6 +162,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
     # if current_user["disabled"]:
+    print("--> running get_current_active_user")
     if current_user is None:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
