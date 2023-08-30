@@ -7,10 +7,10 @@ from opentelemetry.propagate import extract
 from opentelemetry import trace
 from opentelemetry.trace import Tracer
 
-from common.Auth import get_password_hash
-from handlers.account_handler import AccountHandler
-from handlers.portfolio_handler import PortfolioHandler
-from models.Portfolio import Portfolio
+from app.common.Auth import get_password_hash
+from app.handlers.account_handler import AccountHandler
+from app.handlers.portfolio_handler import PortfolioHandler
+from app.models.Portfolio import Portfolio
 from app.storage.Dynamo import Dynamo
 
 logger = logging.getLogger(__name__)
@@ -55,7 +55,7 @@ class UserHandler:
 
                     # todo orchestrate and rollback. if one fails the rollback
                     ledger_resp = AccountHandler.handle_create_account(username, Decimal('0.00'), is_test)
-                    default_portfolio: Portfolio = Portfolio(name=username, portfolio=[
+                    default_portfolio: Portfolio = Portfolio(username=username, portfolio=[
                         {"name": "litecoin", "amount": 1, "id": "litecoin"}])
                     portfolio_resp = PortfolioHandler.handle_create_portfolio(username, default_portfolio, is_test)
 

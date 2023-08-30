@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException
 from mangum import Mangum
 from starlette.middleware.cors import CORSMiddleware
 
-from app.routes import helloworld_router, account_router, auth_router, portfolio_router
+from app.routes import helloworld_router, account_router, auth_router, portfolio_router, user_router
 from app.monitoring import logging_config
 from app.middlewares.correlation_id_middleware import CorrelationIdMiddleware
 from app.middlewares.logging_middleware import LoggingMiddleware
@@ -69,6 +69,7 @@ app.include_router(helloworld_router.router, prefix='/hello', tags=['hello'])
 app.include_router(account_router.router, prefix='/account', tags=['account'])
 app.include_router(auth_router.router, prefix='/auth', tags=['auth'])
 app.include_router(portfolio_router.router, prefix='/portfolio', tags=['portfolio'])
+app.include_router(user_router.router, prefix='/user', tags=['user'])
 
 ###############################################################################
 #   Handler for AWS Lambda                                                    #
