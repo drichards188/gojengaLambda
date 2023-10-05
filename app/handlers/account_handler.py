@@ -93,7 +93,13 @@ class AccountHandler:
             table_name: str = 'ledger'
             if is_test:
                 table_name = 'ledgerTest'
+
+            #     todo check usernames are valid before transaction
             try:
+                ping_recipient = AccountHandler.handle_get_account(receiver, is_test)
+                if "message" in ping_recipient and ping_recipient["message"] == 'item not found':
+                    raise ValueError('recipient not found')
+
                 sender_resp = AccountHandler.handle_modify_account(sender, amount * -1, is_test)
                 if sender_resp == 'update item success':
                     receiver_resp = AccountHandler.handle_modify_account(receiver, amount, is_test)

@@ -36,6 +36,7 @@ async def login_for_access_token(request: Request, is_test: Optional[bool] | Non
             data={"sub": user["name"]}, expires_delta=access_token_expires
         )
         refresh_token_expires = timedelta(days=REFRESH_ACCESS_TOKEN_EXPIRE_DAYS)
+        # refresh_token_expires = timedelta(minutes=2)
         refresh_token = create_access_token(data={"sub": user["name"]}, expires_delta=refresh_token_expires)
         return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
     except Exception as e:
