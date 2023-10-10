@@ -80,10 +80,32 @@ class AccountHandler:
                 table_name = 'ledgerTest'
             try:
                 resp = Dynamo.delete_item(table_name, {'name': username})
-                return resp
+
             except Exception as e:
                 logger.info(f'error {e}')
                 raise ValueError(e)
+
+            if is_test:
+                table_name = 'portfolioTest'
+            else:
+                table_name = 'portfolio'
+            try:
+                resp = Dynamo.delete_item(table_name, {'name': username})
+            except Exception as e:
+                logger.info(f'error {e}')
+                raise ValueError(e)
+
+            if is_test:
+                table_name = 'usersTest'
+            else:
+                table_name = 'users'
+            try:
+                resp = Dynamo.delete_item(table_name, {'name': username})
+            except Exception as e:
+                logger.info(f'error {e}')
+                raise ValueError(e)
+
+            return resp
 
     @staticmethod
     def handle_transaction(sender: str, receiver: str, amount: Decimal, is_test: bool) -> str:
