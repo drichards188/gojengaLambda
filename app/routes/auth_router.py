@@ -26,11 +26,7 @@ async def login_for_access_token(request: Request, is_test: Optional[bool] | Non
             table_name = 'usersTest'
         user = authenticate_user(table_name, form_data.username.lower(), form_data.password)
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            raise Exception("Invalid username or password")
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user["name"]}, expires_delta=access_token_expires
@@ -41,6 +37,8 @@ async def login_for_access_token(request: Request, is_test: Optional[bool] | Non
         return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
     except Exception as e:
         logger.error(e)
+        if str(e) == "Invalid username or password":
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 

@@ -91,6 +91,10 @@ def get_user(table_name, username: str):
 def authenticate_user(table_name, username: str, password: str):
     print("--> running authenticate_user")
     user = get_user(table_name, username)
+    if "message" in user:
+        if user["message"] == "item not found":
+            print("--> user not found")
+            return False
     if not user:
         print("--> user not found")
         return False
