@@ -31,3 +31,5 @@ passlib>=1.7.4
 pytz>=2023.3
 mangum>=0.13.0
 bcrypt>=4.0.1
+numpy~=1.26.1
+pandas~=2.1.1
