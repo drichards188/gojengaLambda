@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 @router.get("/{symbol}", tags=["Risk"])
 async def get_sharpe_ratio(request: Request, symbol: str):
     try:
-        risk = RiskHandler.handle_get_sharpe_ratio(symbol)
+        sharpe_ratio: float = RiskHandler.handle_get_sharpe_ratio(symbol)
+        risk: object = RiskHandler.evaluate_sharpe_ratio(sharpe_ratio)
         print(f'--> risk is: {risk}')
         return {"response": risk}
     except Exception as e:
